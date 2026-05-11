@@ -13,10 +13,10 @@
 
 **1. Kafka 설정 및 토픽 생성**
 
-**Kafka 실행 (윈도우 터미널)**
+**Kafka 실행 (윈도우 터미널)** <br />
 bin/kafka-server-start.sh config/server.properties
 
-# 필수 토픽 생성
+**필수 토픽 생성**
 bin/kafka-topics.sh --create --topic video-lastpos-logs --bootstrap-server localhost:9092<br />
 bin/kafka-topics.sh --create --topic video-rewatch-logs --bootstrap-server localhost:9092<br />
 bin/kafka-topics.sh --create --topic video-skip-logs --bootstrap-server localhost:9092<br />
