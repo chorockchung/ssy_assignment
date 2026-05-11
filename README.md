@@ -1,4 +1,4 @@
-플랫폼 / 데이터 엔지니어링 인턴 채용 과제
+##플랫폼 / 데이터 엔지니어링 인턴 채용 과제
 
 ## 🛠 Tech Stack
 * **Language:** Java 17
@@ -12,16 +12,21 @@
 
 -- docker 미사용시 --
 1.kafka 설치 
+
 2.kafka 실행 (윈도우터미널 입력) 
 bin/kafka-server-start.sh config/server.properties
+
 3.kafka 토픽 생성 (윈도우터미널 입력)
 bin/kafka-topics.sh --create --topic video-lastpos-logs --bootstrap-server localhost:9092
 bin/kafka-topics.sh --create --topic video-rewatch-logs --bootstrap-server localhost:9092
 bin/kafka-topics.sh --create --topic video-skip-logs --bootstrap-server localhost:9092
 bin/kafka-topics.sh --create --topic video-Maxpos-logs --bootstrap-server localhost:9092
+
 4. mysql/init/init.sql 폴더의 sql로 db 생성
-5. (순서 중요 ‼) IntegratedLogConsumer 실행 후 AutoLogConsumer 실행
-6. (순서 중요 ‼) intellij에서 run 종료시 AutoLogConsumer 종료 후 IntegratedLogConsumer 종료
+5. 
+6. (순서 중요 ‼) IntegratedLogConsumer 실행 후 AutoLogConsumer 실행
+7. 
+8. (순서 중요 ‼) intellij에서 run 종료시 AutoLogConsumer 종료 후 IntegratedLogConsumer 종료
 
 -- docker 사용시 --
 1. 주석처리
