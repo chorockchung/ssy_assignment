@@ -12,7 +12,8 @@ import java.util.Arrays;
 import java.util.Properties;
 
 public class IntegratedLogConsumer {
-    public static final String DB_URL = "jdbc:mysql://db:3306/kafka_log_db";
+    public static final String DB_URL = "jdbc:mysql://localhost:3306/kafka_log_db"; //docker용
+    //public static final String DB_URL = "jdbc:mysql://db:3306/kafka_log_db"; //docker용
     public static final String DB_USER = "dev_user";       // init.sql에 쓴 유저
     public static final String DB_PW = "dev_pass123!";    // init.sql에 쓴 비번
 
@@ -21,7 +22,8 @@ public class IntegratedLogConsumer {
         ObjectMapper objectMapper = new ObjectMapper();
 
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "db:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"); // 일반 JAVA 용
+//        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "db:9092"); // docker용
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "video-analysis-group-v2");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");

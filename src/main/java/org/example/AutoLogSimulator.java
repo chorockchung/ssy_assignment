@@ -32,7 +32,8 @@ public class AutoLogSimulator {
 
         //kafka 설정
         Properties props = new Properties();
-        props.put("bootstrap.servers", "kafka:9092");
+        props.put("bootstrap.servers", "localhost:9092"); //일반 java 용
+//        props.put("bootstrap.servers", "kafka:9092"); //docker용
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
