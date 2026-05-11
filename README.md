@@ -17,10 +17,10 @@
 bin/kafka-server-start.sh config/server.properties
 
 # 필수 토픽 생성
-bin/kafka-topics.sh --create --topic video-lastpos-logs --bootstrap-server localhost:9092
-bin/kafka-topics.sh --create --topic video-rewatch-logs --bootstrap-server localhost:9092
-bin/kafka-topics.sh --create --topic video-skip-logs --bootstrap-server localhost:9092
-bin/kafka-topics.sh --create --topic video-maxpos-logs --bootstrap-server localhost:9092
+bin/kafka-topics.sh --create --topic video-lastpos-logs --bootstrap-server localhost:9092<br />
+bin/kafka-topics.sh --create --topic video-rewatch-logs --bootstrap-server localhost:9092<br />
+bin/kafka-topics.sh --create --topic video-skip-logs --bootstrap-server localhost:9092<br />
+bin/kafka-topics.sh --create --topic video-maxpos-logs --bootstrap-server localhost:9092<br />
 
 **2. 데이터베이스 초기화**
 
@@ -40,7 +40,7 @@ Docker 네트워크 환경에 맞춰 아래 코드의 주석을 교체합니다.
 AutoLogSimulator.java: 35번 줄 주석 처리 후 36번 줄 주석 해제
 
 IntegratedLogConsumer.java:
-15번 줄 주석 처리 후 16번 줄 주석 해제
+15번 줄 주석 처리 후 16번 줄 주석 해제<br />
 25번 줄 주석 처리 후 26번 줄 주석 해제
 
 **2. 인프라 실행**
