@@ -1,0 +1,74 @@
+version: '3.8'
+services:
+  # 1. MySQL 설정
+  db:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: temporary_root_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    # DB가 완전히 준비되었는지 확인하는 헬스체크
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-ptemporary_root_pass"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - kafka-pipeline
+
+  # 2. Zookeeper
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - kafka-pipeline
+
+  # 3. Kafka 설정
+  kafka:
+    image: bitnami/kafka:latest
+    container_name: kafka-container
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+    ports:
+      - "9092:9092"
+    networks:
+      - kafka-pipeline
+
+  # 4. Consumer 서비스 (데이터 적재)
+  consumer-app:
+    build: .  # 현재 위치의 Dockerfile 사용
+    container_name: consumer-app
+    command: java -cp app.jar org.example.IntegratedLogConsumer
+    depends_on:
+      db:
+        condition: service_healthy  # DB 헬스체크 통과 후 실행
+      kafka:
+        condition: service_started
+    environment:
+      - DB_URL=jdbc:mysql://db:3306/kafka_log_db  # 'localhost' 대신 서비스 이름 'db' 사용
+    networks:
+      - kafka-pipeline
+
+  # 5. Simulator 서비스 (데이터 생성)
+  simulator-app:
+    build: .
+    container_name: simulator-app
+    command: java -cp app.jar org.example.AutoLogSimulator
+    depends_on:
+      - consumer-app  # 컨슈머가 뜬 후 실행
+    environment:
+      - KAFKA_SERVERS=kafka:9092  # 'localhost' 대신 'kafka' 사용
+    networks:
+      - kafka-pipeline
+
+networks:
+  kafka-pipeline:
+    driver: bridge
