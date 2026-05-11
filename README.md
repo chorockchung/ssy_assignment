@@ -80,18 +80,24 @@ docker-compose up -d
   - 실시간 시청 및 이탈 
   - 동영상 되감기(다시보기)
   - 동영상 스킵
+    
 
-라이브클래스의 주된 상품은 강의를 판매하는 플랫폼이고, 해당 플랫폼이 잘 유지되기 위해서는 강의자들이 충분한 수익을 내야할텐데,<br />
-수익을 계속해서 내기 위해서는 강의자용 대시보드가 필수라고 생각했습니다.<br />
-유튜브 채널 애널리틱스에서 주된 요소들을 참고했습니다.<br />
-영상에서 분석했을 때 가장 좋은 데이터는 동영상 이탈률, 가장 많이 다시 본 부분, 건너 뛴 부분이라고 생각했습니다.<br />
+플랫폼의 지속 가능한 성장을 위해서는 공급자인 강사가 수익을 창출할 수 있는 환경이 필수적입니다. <br />
+이를 위해 YouTube 분석 지표를 벤치마킹하여, 강사가 콘텐츠의 질을 개선할 수 있도록 돕는 강의 분석 대시보드를 기획했습니다. <br />
+특히 시청 데이터 중 콘텐츠 개선에 가장 직관적인 인사이트를 제공하는 동영상 이탈률, 구간별 재시청 및 스킵 구간을 핵심 지표로 선정하여 데이터 파이프라인을 설계했습니다.<br />
 
 ---
 
 ## 2. 로그 저장
-   mysql, kafka를 사용했습니다.<br />
-   mysql은 java 및 spring boot와 가장 많이 커플링으로 사용되는 rdbms고, 저의 프로젝트와 회사에서 사용해보았기 떄문에 선택했습니다. <br />
-   동영상 데이터 특성상 실시간 데이터를 분석하기 위해 수많은 로그가 빠르게 쌓이는데, mysql의 부담을 줄이기 위해 중간 브로커로 kafka를 선택했습니다. <br />
+  - MySQL 8.0: 
+   Java 및 Spring Boot 환경에서 가장 검증된 RDBMS로, 높은 데이터 일관성과 관리 편의성을 제공합니다.  <br />
+   이전 프로젝트와 실무 환경에서의 운용 경험을 바탕으로, 데이터의 무결성을 보장하며 안정적으로 관리하기 위해 선택했습니다. <br /> <br />
+
+- Apache Kafka: 
+동영상 스트리밍 로그는 특성상 단시간에 대량의 트래픽이 발생합니다.   <br />
+DB에 직접 쓰기 작업을 수행할 경우 발생하는 병목 현상을 방지하고, 시스템 간의 결합도를 낮추기 위해 Kafka를 중간 메시지 브로커로 도입했습니다.  <br />
+이를 통해 실시간 로그 데이터를 비동기적으로 처리하여 데이터 파이프라인의 가용성을 극대화했습니다.  <br />  <br />
+
 
    CREATE TABLE `video_lastpos_logs` ( <br />
   `id` int NOT NULL AUTO_INCREMENT,<br />
@@ -134,11 +140,11 @@ CREATE TABLE `video_skipping_logs` ( <br />
 ) ENGINE=InnoDB AUTO_INCREMENT=987 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;<br /><br />
 
 동영상의 어느 부분이 가장 가치가 떨어지는지 판단하기 위해,<br />
-뛰어넘기를 시작한 부분 (prev_pos)와 현재 뛰어넘어서 시청중인 부분 current_pos를 넣었습니다.<br />
+뛰어넘기를 시작한 부분 (prev_pos)와 현재 뛰어넘어서 시청중인 부분 current_pos를 넣었습니다.<br /><br />
 
 ## 3. 데이터 분석
 
-**구간별 잔존 유저 수**<br />
+**구간별 잔존 유저 수**<br /><br />
 
    SELECT <br />
     FLOOR(max_last_pos / 10) * 10 AS section_start, -- 10초 단위 구간<br />
@@ -153,7 +159,7 @@ CREATE TABLE `video_skipping_logs` ( <br />
     GROUP BY section_start<br />
     ORDER BY section_start;<br /><br />
 
-**스킵한 구간(gap)** <br />
+**스킵한 구간(gap)** <br /><br />
 SELECT <br />
     FLOOR(skipstart / 10) * 10 AS section_start,-- 10초 단위 구간<br />
     AVG(currentPos - skipstart) AS avg_skip_duration, <br />
@@ -165,7 +171,7 @@ HAVING avg_skip_duration > 0<br />
 ORDER BY section_start;<br /><br />
 
 
-**가장 많이 다시본 구간**
+**가장 많이 다시본 구간**<br /><br />
 SELECT <br />
     FLOOR(current_pos / 10) * 10 AS rewatch_section, -- 10초 단위 구간<br />
     COUNT(*) AS rewatch_count<br />
@@ -177,7 +183,7 @@ ORDER BY rewatch_count DESC<br />
 LIMIT 5;<br /><br />
 
 
-**4. 데이터 분석 차트는 git에 올려두었습니다.**
+**4. 데이터 분석 차트는 git에 올려두었습니다.** <br />
 5. docker의 경우 컴퓨터에서 실행되지 않아서 실제로 돌려보지 못했지만 yml 파일은 작성해두었습니다.
 
 
