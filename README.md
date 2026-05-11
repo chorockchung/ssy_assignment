@@ -8,32 +8,46 @@
 
 ---
 
-## 🚀 실행 방법 (Getting Started)
+🚀 실행 방법 (Getting Started)
+1️⃣ Docker 미사용 시 (Local)
+1. Kafka 설정 및 토픽 생성
 
--- docker 미사용시 --
-1.kafka 설치 
-
-2.kafka 실행 (윈도우터미널 입력) 
+Bash
+# Kafka 실행 (윈도우 터미널)
 bin/kafka-server-start.sh config/server.properties
 
-3.kafka 토픽 생성 (윈도우터미널 입력)
+# 필수 토픽 생성
 bin/kafka-topics.sh --create --topic video-lastpos-logs --bootstrap-server localhost:9092
 bin/kafka-topics.sh --create --topic video-rewatch-logs --bootstrap-server localhost:9092
 bin/kafka-topics.sh --create --topic video-skip-logs --bootstrap-server localhost:9092
-bin/kafka-topics.sh --create --topic video-Maxpos-logs --bootstrap-server localhost:9092
+bin/kafka-topics.sh --create --topic video-maxpos-logs --bootstrap-server localhost:9092
 
-4. mysql/init/init.sql 폴더의 sql로 db 생성
-5. 
-6. (순서 중요 ‼) IntegratedLogConsumer 실행 후 AutoLogConsumer 실행
-7. 
-8. (순서 중요 ‼) intellij에서 run 종료시 AutoLogConsumer 종료 후 IntegratedLogConsumer 종료
+2. 데이터베이스 초기화
 
--- docker 사용시 --
-1. 주석처리
- - public class AutoLogSimulator 의 35번 줄 주석 처리 후 36번 줄 주석 해제
- - public class IntegratedLogConsumer 15번 줄 주석 처리후 16번 줄 주석 해제, 25번 줄 주석 처리후 26번 줄 주석 해제
-2. 위의 1~3 진행
-3. docker-compose up -d
+mysql/init/init.sql 경로의 SQL 파일을 실행하여 DB 및 테이블을 생성합니다.
+
+3. 애플리케이션 실행 (순서 주의 ‼)
+
+시작 시: IntegratedLogConsumer 실행 → AutoLogSimulator 실행
+
+종료 시: AutoLogSimulator 종료 → IntegratedLogConsumer 종료
+
+2️⃣ Docker 사용 시
+1. 소스코드 환경 설정 (IP 변경)
+Docker 네트워크 환경에 맞춰 아래 코드의 주석을 교체합니다.
+
+AutoLogSimulator.java: 35번 줄 주석 처리 후 36번 줄 주석 해제
+
+IntegratedLogConsumer.java:
+
+15번 줄 주석 처리 후 16번 줄 주석 해제
+25번 줄 주석 처리 후 26번 줄 주석 해제
+
+2. 인프라 실행
+
+# Kafka 및 DB 컨테이너 실행
+docker-compose up -d
+
 
 ## 스키마 설명
 하단 2번에 작성 해두었습니다!
