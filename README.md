@@ -9,14 +9,14 @@
 ---
 
 ## 🚀 실행 방법 (Getting Started)
-**1️⃣ Docker 미사용 시 (Local)**
+**1️⃣ Docker 미사용 시 (Local)** <br />
 
-**1. Kafka 설정 및 토픽 생성**
+**1. Kafka 설정 및 토픽 생성** <br />
 
 **Kafka 실행 (윈도우 터미널)** <br />
 bin/kafka-server-start.sh config/server.properties
 
-**필수 토픽 생성**
+**필수 토픽 생성** <br />
 bin/kafka-topics.sh --create --topic video-lastpos-logs --bootstrap-server localhost:9092<br />
 bin/kafka-topics.sh --create --topic video-rewatch-logs --bootstrap-server localhost:9092<br />
 bin/kafka-topics.sh --create --topic video-skip-logs --bootstrap-server localhost:9092<br />
@@ -33,11 +33,11 @@ mysql/init/init.sql 경로의 SQL 파일을 실행하여 DB 및 테이블을 생
 
 **2️⃣ Docker 사용 시**
 
-**1. 소스코드 환경 설정 (IP 변경)**
+**1. 소스코드 환경 설정 (IP 변경)** 
 
-Docker 네트워크 환경에 맞춰 아래 코드의 주석을 교체합니다.
+Docker 네트워크 환경에 맞춰 아래 코드의 주석을 교체합니다. <br />
 
-AutoLogSimulator.java: 35번 줄 주석 처리 후 36번 줄 주석 해제
+AutoLogSimulator.java: 35번 줄 주석 처리 후 36번 줄 주석 해제 <br />
 
 IntegratedLogConsumer.java:
 15번 줄 주석 처리 후 16번 줄 주석 해제<br />
@@ -45,12 +45,15 @@ IntegratedLogConsumer.java:
 
 **2. 인프라 실행**
 
-Kafka 및 DB 컨테이너 실행
+Kafka 및 DB 컨테이너 실행 <br />
 docker-compose up -d
 
+---
 
 ## 스키마 설명
 하단 2번에 작성 해두었습니다!
+
+---
 
 ## 구현하면서 고민한 점
 1. 데이터 부하 분산 
