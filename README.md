@@ -1,5 +1,5 @@
-##플랫폼 / 데이터 엔지니어링 인턴 채용 과제
-
+## 플랫폼 / 데이터 엔지니어링 인턴 채용 과제
+---
 ## 🛠 Tech Stack
 * **Language:** Java 17
 * **Framework:** Maven / Gradle
@@ -8,11 +8,12 @@
 
 ---
 
-#🚀 실행 방법 (Getting Started)
-1️⃣ Docker 미사용 시 (Local)
-** 1. Kafka 설정 및 토픽 생성**
+## 🚀 실행 방법 (Getting Started)
+**1️⃣ Docker 미사용 시 (Local)**
 
-** Kafka 실행 (윈도우 터미널) **
+**1. Kafka 설정 및 토픽 생성**
+
+**Kafka 실행 (윈도우 터미널)**
 bin/kafka-server-start.sh config/server.properties
 
 # 필수 토픽 생성
@@ -21,17 +22,19 @@ bin/kafka-topics.sh --create --topic video-rewatch-logs --bootstrap-server local
 bin/kafka-topics.sh --create --topic video-skip-logs --bootstrap-server localhost:9092
 bin/kafka-topics.sh --create --topic video-maxpos-logs --bootstrap-server localhost:9092
 
-** 2. 데이터베이스 초기화 **
+**2. 데이터베이스 초기화**
 
 mysql/init/init.sql 경로의 SQL 파일을 실행하여 DB 및 테이블을 생성합니다.
 
-** 3. 애플리케이션 실행 (순서 주의!!)  **
+**3. 애플리케이션 실행 (순서 주의!!)**
 
 시작 시: IntegratedLogConsumer 실행 → AutoLogSimulator 실행
 종료 시: AutoLogSimulator 종료 → IntegratedLogConsumer 종료
 
-2️⃣ Docker 사용 시
-** 1. 소스코드 환경 설정 (IP 변경) **
+**2️⃣ Docker 사용 시**
+
+**1. 소스코드 환경 설정 (IP 변경)**
+
 Docker 네트워크 환경에 맞춰 아래 코드의 주석을 교체합니다.
 
 AutoLogSimulator.java: 35번 줄 주석 처리 후 36번 줄 주석 해제
@@ -40,7 +43,7 @@ IntegratedLogConsumer.java:
 15번 줄 주석 처리 후 16번 줄 주석 해제
 25번 줄 주석 처리 후 26번 줄 주석 해제
 
-** 2. 인프라 실행 **
+**2. 인프라 실행**
 
 Kafka 및 DB 컨테이너 실행
 docker-compose up -d
